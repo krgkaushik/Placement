@@ -1,0 +1,476 @@
+{% extends "base.html" %}
+{% block title %}Analytics Dashboard — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .analytics-shell {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 28px 20px 50px;
+    }
+
+    /* ================= HEADER ================= */
+
+    .analytics-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 28px;
+        padding: 10px 4px;
+    }
+
+    .eyebrow {
+        display: inline-block;
+        color: #6366f1;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .analytics-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 800;
+        color: #111827;
+        letter-spacing: -0.8px;
+    }
+
+    /* ================= STATS ================= */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 22px;
+    }
+
+    .stat-card {
+        position: relative;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        padding: 22px 23px;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+        transition: all 0.25s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+    }
+
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        right: -25px;
+        bottom: -30px;
+        background: rgba(99, 102, 241, 0.07);
+    }
+
+    .stat-card span {
+        display: block;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 9px;
+    }
+
+    .stat-card strong {
+        display: block;
+        color: #111827;
+        font-size: 29px;
+        line-height: 1;
+        font-weight: 800;
+    }
+
+    .stat-card:nth-child(1) {
+        border-left: 4px solid #6366f1;
+    }
+
+    .stat-card:nth-child(2) {
+        border-left: 4px solid #10b981;
+    }
+
+    .stat-card:nth-child(3) {
+        border-left: 4px solid #f59e0b;
+    }
+
+    .stat-card.emphasis {
+        background: linear-gradient(135deg, #312e81, #4f46e5);
+        border: none;
+    }
+
+    .stat-card.emphasis span,
+    .stat-card.emphasis strong {
+        color: white;
+    }
+
+    .stat-card.emphasis::after {
+        background: rgba(255,255,255,0.08);
+    }
+
+    /* ================= PANELS ================= */
+
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    .panel {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.045);
+    }
+
+    .chart-panel {
+        padding: 23px;
+    }
+
+    .panel h3 {
+        margin: 0;
+        color: #172033;
+        font-size: 16px;
+        font-weight: 750;
+    }
+
+    .chart-wrapper {
+        position: relative;
+        height: 290px;
+        margin-top: 20px;
+    }
+
+    /* ================= TABLE ================= */
+
+    .table-panel {
+        overflow: hidden;
+    }
+
+    .table-panel h3 {
+        padding: 22px 24px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .table-panel table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-panel th {
+        padding: 14px 24px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+
+    .table-panel td {
+        padding: 17px 24px;
+        color: #334155;
+        font-size: 14px;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .table-panel tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .table-panel tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .table-panel td:first-child {
+        color: #111827;
+        font-weight: 700;
+    }
+
+    .table-panel td:nth-child(2),
+    .table-panel td:nth-child(3) {
+        font-weight: 700;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 950px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .charts-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .analytics-shell {
+            padding: 18px 12px 35px;
+        }
+
+        .analytics-header h1 {
+            font-size: 25px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .stat-card {
+            padding: 18px 16px;
+        }
+
+        .stat-card strong {
+            font-size: 24px;
+        }
+
+        .chart-panel {
+            padding: 18px;
+        }
+
+        .chart-wrapper {
+            height: 250px;
+        }
+
+        .table-panel {
+            overflow-x: auto;
+        }
+
+        .table-panel table {
+            min-width: 550px;
+        }
+    }
+</style>
+
+
+<div class="analytics-shell">
+
+    <!-- HEADER -->
+
+    <div class="analytics-header">
+        <div>
+            <span class="eyebrow">Placement Intelligence</span>
+            <h1>{{ name }} Dashboard</h1>
+        </div>
+    </div>
+
+
+    <!-- STATISTICS -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <span>Total Students</span>
+            <strong>{{ analytics.total_students }}</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Placement Ready</span>
+            <strong>{{ analytics.ready_students }}</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Needs Training</span>
+            <strong>{{ analytics.needs_training }}</strong>
+        </div>
+
+        <div class="stat-card emphasis">
+            <span>Overall Readiness</span>
+            <strong>{{ analytics.readiness_percentage }}%</strong>
+        </div>
+
+    </div>
+
+
+    <!-- CHARTS -->
+
+    <div class="charts-grid">
+
+        <div class="panel chart-panel">
+
+            <h3>Placement Readiness</h3>
+
+            <div class="chart-wrapper">
+                <canvas id="readinessChart"></canvas>
+            </div>
+
+        </div>
+
+
+        <div class="panel chart-panel">
+
+            <h3>Top Missing Skills</h3>
+
+            <div class="chart-wrapper">
+                <canvas id="skillChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPANIES TABLE -->
+
+    <div class="panel table-panel">
+
+        <h3>Active Hiring Companies</h3>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Jobs Posted</th>
+                    <th>Shortlisted</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for employer in analytics.top_employers %}
+
+                <tr>
+                    <td>{{ employer.company_name }}</td>
+                    <td>{{ employer.jobs_posted }}</td>
+                    <td>{{ employer.shortlisted_students }}</td>
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="3">
+                        No hiring activity recorded yet.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const readinessData = {
+    labels: ['Ready', 'Needs Training'],
+    datasets: [{
+        data: [
+            {{ analytics.ready_students }},
+            {{ analytics.needs_training }}
+        ],
+        backgroundColor: ['#34d399', '#f59e0b'],
+        borderWidth: 0
+    }]
+};
+
+const skillLabels = {{ analytics.skill_trends | map(attribute='skill') | list | tojson }};
+const skillCounts = {{ analytics.skill_trends | map(attribute='count') | list | tojson }};
+
+let readinessChartInstance = null;
+let skillChartInstance = null;
+
+if (readinessChartInstance) {
+    readinessChartInstance.destroy();
+}
+
+readinessChartInstance = new Chart(
+    document.getElementById('readinessChart'),
+    {
+        type: 'doughnut',
+
+        data: readinessData,
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#475569',
+                        padding: 18,
+                        usePointStyle: true
+                    }
+                }
+            },
+
+            cutout: '65%'
+        }
+    }
+);
+
+
+if (skillChartInstance) {
+    skillChartInstance.destroy();
+}
+
+skillChartInstance = new Chart(
+    document.getElementById('skillChart'),
+    {
+        type: 'bar',
+
+        data: {
+            labels: skillLabels,
+
+            datasets: [{
+                label: 'Students Missing Skill',
+                data: skillCounts,
+                backgroundColor: ['#8b5cf6', '#60a5fa', '#f472b6'],
+                borderRadius: 8
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#64748b'
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
+
+                y: {
+                    ticks: {
+                        color: '#64748b'
+                    },
+                    grid: {
+                        color: 'rgba(148, 163, 184, 0.12)'
+                    }
+                }
+            },
+
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    }
+);
+</script>
+
+{% endblock %}

@@ -1,0 +1,554 @@
+{% extends "base.html" %}
+{% block title %}Company Dashboard — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .company-dashboard {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 30px 20px 50px;
+    }
+
+    /* ================= HERO ================= */
+
+    .company-hero {
+        position: relative;
+        overflow: hidden;
+        min-height: 230px;
+        padding: 35px 38px;
+        margin-bottom: 22px;
+        border-radius: 24px;
+        background: linear-gradient(120deg, #0f172a, #1e293b 55%, #312e81);
+        color: white;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+    }
+
+    .company-hero::before {
+        content: "";
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        right: -100px;
+        top: -160px;
+        border-radius: 50%;
+        border: 55px solid rgba(255,255,255,0.05);
+    }
+
+    .company-hero::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        right: 170px;
+        bottom: -120px;
+        border-radius: 50%;
+        background: rgba(99,102,241,0.15);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 650px;
+    }
+
+    .hero-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 11px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        color: #c7d2fe;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .hero-label::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #34d399;
+        box-shadow: 0 0 0 4px rgba(52,211,153,0.12);
+    }
+
+    .hero-content h1 {
+        margin: 0;
+        font-size: 34px;
+        font-weight: 850;
+        letter-spacing: -1px;
+    }
+
+    .hero-content p {
+        margin: 10px 0 0;
+        color: #cbd5e1;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* ================= QUICK ACTIONS ================= */
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 28px 3px 14px;
+    }
+
+    .section-heading h2 {
+        margin: 0;
+        color: #111827;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .section-heading span {
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .action-card {
+        position: relative;
+        overflow: hidden;
+        display: block;
+        min-height: 145px;
+        padding: 22px;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        background: #ffffff;
+        text-decoration: none;
+        box-shadow: 0 5px 18px rgba(15,23,42,0.04);
+        transition: all 0.25s ease;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+        border-color: #c7d2fe;
+        box-shadow: 0 15px 30px rgba(15,23,42,0.09);
+    }
+
+    .action-icon {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 17px;
+        border-radius: 12px;
+        font-size: 21px;
+    }
+
+    .action-card:nth-child(1) .action-icon {
+        background: #eff6ff;
+    }
+
+    .action-card:nth-child(2) .action-icon {
+        background: #f5f3ff;
+    }
+
+    .action-card:nth-child(3) .action-icon {
+        background: #ecfdf5;
+    }
+
+    .action-card:nth-child(4) .action-icon {
+        background: #fff7ed;
+    }
+
+    .action-card h3 {
+        margin: 0 0 6px;
+        color: #172033;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .action-card p {
+        margin: 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+    .action-arrow {
+        position: absolute;
+        right: 18px;
+        bottom: 17px;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 15px;
+        transition: all 0.2s ease;
+    }
+
+    .action-card:hover .action-arrow {
+        background: #4f46e5;
+        color: white;
+        transform: translateX(3px);
+    }
+
+    /* ================= ROLES ================= */
+
+    .panel {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        box-shadow: 0 6px 22px rgba(15,23,42,0.045);
+    }
+
+    .table-panel {
+        overflow: hidden;
+    }
+
+    .roles-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 22px 24px;
+        border-bottom: 1px solid #edf1f5;
+    }
+
+    .roles-header h3 {
+        margin: 0;
+        color: #111827;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .roles-header span {
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .table-panel table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-panel th {
+        padding: 13px 24px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 800;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+    }
+
+    .table-panel td {
+        padding: 17px 24px;
+        border-top: 1px solid #edf1f5;
+        color: #64748b;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .table-panel tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .table-panel tbody tr:hover {
+        background: #fafbff;
+    }
+
+    .table-panel td:first-child {
+        color: #111827;
+        font-size: 14px;
+        font-weight: 750;
+    }
+
+    .role-type {
+        display: inline-flex;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .skills {
+        max-width: 400px;
+        line-height: 1.6;
+    }
+
+    .candidate-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: #eef2ff;
+        color: #4f46e5;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        transition: all 0.2s ease;
+    }
+
+    .candidate-link::after {
+        content: "→";
+        font-size: 14px;
+    }
+
+    .candidate-link:hover {
+        background: #4f46e5;
+        color: white;
+        transform: translateX(2px);
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 950px) {
+        .actions-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .table-panel {
+            overflow-x: auto;
+        }
+
+        .table-panel table {
+            min-width: 800px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .company-dashboard {
+            padding: 18px 12px 35px;
+        }
+
+        .company-hero {
+            padding: 28px 24px;
+            border-radius: 19px;
+        }
+
+        .hero-content h1 {
+            font-size: 27px;
+        }
+
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-card {
+            min-height: 125px;
+        }
+
+        .roles-header {
+            padding: 18px;
+        }
+    }
+</style>
+
+
+<div class="company-dashboard">
+
+    <!-- ================= HERO ================= -->
+
+    <div class="company-hero">
+
+        <div class="hero-content">
+
+            <span class="hero-label">
+                Recruiter Workspace
+            </span>
+
+            <h1>
+                Company Dashboard
+            </h1>
+
+            <p>
+                Welcome, {{ name }}. Manage your hiring pipeline,
+                publish opportunities and discover talented students.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= QUICK ACTIONS ================= -->
+
+    <div class="section-heading">
+        <h2>Hiring Workspace</h2>
+        <span>Quick actions</span>
+    </div>
+
+
+    <div class="actions-grid">
+
+        <a href="{{ url_for('company.post_job') }}" class="action-card">
+
+            <div class="action-icon">
+                📝
+            </div>
+
+            <h3>Post Internship</h3>
+
+            <p>
+                Create a new internship listing for students.
+            </p>
+
+            <span class="action-arrow">
+                →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('company.post_job') }}" class="action-card">
+
+            <div class="action-icon">
+                💼
+            </div>
+
+            <h3>Post Job</h3>
+
+            <p>
+                Publish a new full-time job opportunity.
+            </p>
+
+            <span class="action-arrow">
+                →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('company.applications') }}" class="action-card">
+
+            <div class="action-icon">
+                👥
+            </div>
+
+            <h3>Applications</h3>
+
+            <p>
+                Review and manage student applications.
+            </p>
+
+            <span class="action-arrow">
+                →
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('company.analytics') }}" class="action-card">
+
+            <div class="action-icon">
+                📊
+            </div>
+
+            <h3>Analytics</h3>
+
+            <p>
+                Monitor hiring performance and recruitment metrics.
+            </p>
+
+            <span class="action-arrow">
+                →
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- ================= POSTED ROLES ================= -->
+
+    {% if jobs %}
+
+    <div class="section-heading">
+        <h2>Your Posted Roles</h2>
+        <span>Active opportunities</span>
+    </div>
+
+
+    <div class="panel table-panel">
+
+        <div class="roles-header">
+
+            <h3>Published Opportunities</h3>
+
+            <span>Recruitment</span>
+
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Required Skills</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for job in jobs %}
+
+                <tr>
+
+                    <td>
+                        {{ job.title }}
+                    </td>
+
+                    <td>
+                        <span class="role-type">
+                            {{ job.type }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <div class="skills">
+                            {{ job.required_skills|join(', ') }}
+                        </div>
+                    </td>
+
+                    <td>
+                        <a
+                            href="{{ url_for('company.job_candidates', job_id=job._id) }}"
+                            class="candidate-link"
+                        >
+                            View Candidates
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

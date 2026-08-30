@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+{% block title %}Aptitude & Technical Assessment — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .assessment-page {
+        max-width: 1050px;
+        margin: 30px auto;
+        padding: 0;
+    }
+
+    /* Header */
+    .assessment-hero {
+        background: linear-gradient(135deg, #111827 0%, #1e3a8a 100%);
+        color: white;
+        border-radius: 24px;
+        padding: 38px 42px;
+        margin-bottom: 25px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .assessment-hero::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border: 45px solid rgba(255,255,255,0.05);
+        border-radius: 50%;
+        right: -80px;
+        top: -110px;
+    }
+
+    .assessment-hero::after {
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        background: rgba(59,130,246,0.15);
+        border-radius: 50%;
+        right: 150px;
+        bottom: -70px;
+    }
+
+    .learning-header {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .eyebrow {
+        display: inline-block;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #93c5fd;
+        margin-bottom: 10px;
+    }
+
+    .learning-header h1 {
+        margin: 0;
+        font-size: 32px;
+        line-height: 1.2;
+        font-weight: 800;
+        letter-spacing: -0.6px;
+    }
+
+    .learning-header p {
+        margin: 10px 0 0;
+        color: #cbd5e1;
+        font-size: 15px;
+    }
+
+    .btn-logout {
+        flex-shrink: 0;
+        text-decoration: none;
+        color: white;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        padding: 11px 18px;
+        border-radius: 11px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        backdrop-filter: blur(8px);
+    }
+
+    .btn-logout:hover {
+        background: white;
+        color: #1e3a8a;
+        transform: translateY(-2px);
+    }
+
+    /* Form */
+    .assessment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    /* Question Card */
+    .assessment-question {
+        margin: 0;
+        padding: 25px 28px 28px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.05);
+        transition: all 0.25s ease;
+    }
+
+    .assessment-question:hover {
+        border-color: #bfdbfe;
+        box-shadow: 0 10px 28px rgba(37, 99, 235, 0.08);
+    }
+
+    .assessment-question legend {
+        width: 100%;
+        padding: 0 0 18px;
+        margin: 0;
+        color: #172033;
+        font-size: 17px;
+        line-height: 1.55;
+        font-weight: 700;
+    }
+
+    .assessment-question legend span {
+        display: inline-flex;
+        align-items: center;
+        margin-right: 12px;
+        padding: 5px 10px;
+        border-radius: 7px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+    }
+
+    /* Options */
+    .assessment-options {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .assessment-option {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 17px;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        background: #f8fafc;
+        cursor: pointer;
+        color: #334155;
+        font-size: 14px;
+        line-height: 1.45;
+        transition: all 0.2s ease;
+    }
+
+    .assessment-option:hover {
+        border-color: #93c5fd;
+        background: #eff6ff;
+    }
+
+    .assessment-option input {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        margin: 0;
+        border: 2px solid #94a3b8;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s ease;
+    }
+
+    .assessment-option input:checked {
+        border-color: #2563eb;
+        background: #2563eb;
+    }
+
+    .assessment-option input:checked::after {
+        content: "";
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        left: 4px;
+        top: 4px;
+    }
+
+    .assessment-option:has(input:checked) {
+        border-color: #60a5fa;
+        background: #eff6ff;
+        color: #1d4ed8;
+        box-shadow: 0 0 0 2px rgba(37,99,235,0.08);
+    }
+
+    /* Submit */
+    .assessment-submit {
+        align-self: flex-end;
+        margin-top: 8px;
+        min-width: 190px;
+        padding: 14px 24px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(37,99,235,0.22);
+        transition: all 0.25s ease;
+    }
+
+    .assessment-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 13px 25px rgba(37,99,235,0.3);
+    }
+
+    .assessment-submit:active {
+        transform: translateY(0);
+    }
+
+    /* Mobile */
+    @media (max-width: 750px) {
+        .assessment-page {
+            margin: 15px auto;
+        }
+
+        .assessment-hero {
+            padding: 28px 24px;
+            border-radius: 18px;
+        }
+
+        .learning-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .learning-header h1 {
+            font-size: 25px;
+        }
+
+        .btn-logout {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .assessment-options {
+            grid-template-columns: 1fr;
+        }
+
+        .assessment-question {
+            padding: 21px;
+        }
+
+        .assessment-submit {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="learning-card assessment-page">
+
+    <!-- Assessment Header -->
+    <div class="assessment-hero">
+        <div class="learning-header">
+
+            <div>
+                <span class="eyebrow">Student Assessment</span>
+
+                <h1>
+                    Aptitude &amp; Technical Assessment
+                </h1>
+
+                <p>
+                    Test your knowledge, choose the best answer, and submit when you're ready.
+                </p>
+            </div>
+
+            <a href="{{ url_for('student.dashboard') }}" class="btn-logout">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Questions -->
+    <form class="assessment-form"
+          method="post"
+          action="{{ url_for('assessment_api.grade_assessment') }}">
+
+        {% for question in questions %}
+
+        <fieldset class="assessment-question">
+
+            <legend>
+                <span>Question {{ loop.index }}</span>
+                {{ question.question_text }}
+            </legend>
+
+            {% set question_index = loop.index0 %}
+
+            <div class="assessment-options">
+
+                {% for option in question.options %}
+
+                <label class="assessment-option">
+
+                    <input
+                        type="radio"
+                        name="question_{{ question_index }}"
+                        value="{{ option }}"
+                        required
+                    >
+
+                    <span>{{ option }}</span>
+
+                </label>
+
+                {% endfor %}
+
+            </div>
+
+        </fieldset>
+
+        {% endfor %}
+
+        <button type="submit" class="primary-btn assessment-submit">
+            Submit Assessment →
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

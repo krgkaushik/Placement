@@ -1,0 +1,463 @@
+{% extends "base.html" %}
+{% block title %}Faculty Dashboard — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .faculty-dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px 50px;
+    }
+
+    /* ================= HEADER ================= */
+
+    .faculty-hero {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 30px 34px;
+        margin-bottom: 24px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #064e3b, #047857);
+        color: white;
+        box-shadow: 0 16px 35px rgba(5, 150, 105, 0.18);
+    }
+
+    .faculty-hero::after {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        right: -80px;
+        top: -120px;
+        border-radius: 50%;
+        border: 45px solid rgba(255,255,255,0.07);
+    }
+
+    .faculty-icon {
+        position: relative;
+        z-index: 2;
+        width: 68px;
+        height: 68px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.15);
+        font-size: 31px;
+        backdrop-filter: blur(8px);
+    }
+
+    .faculty-hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .eyebrow {
+        display: block;
+        margin-bottom: 6px;
+        color: #a7f3d0;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .faculty-hero h1 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 850;
+        letter-spacing: -0.7px;
+    }
+
+    .dashboard-welcome {
+        margin: 7px 0 0;
+        color: #d1fae5;
+        font-size: 14px;
+    }
+
+    /* ================= STUDENTS PANEL ================= */
+
+    .panel {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        box-shadow: 0 7px 25px rgba(15, 23, 42, 0.05);
+    }
+
+    .faculty-students-panel {
+        overflow: hidden;
+    }
+
+    .panel-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 23px 25px;
+        border-bottom: 1px solid #edf1f5;
+    }
+
+    .panel-heading .eyebrow {
+        margin-bottom: 5px;
+        color: #059669;
+    }
+
+    .panel-heading h2 {
+        margin: 0;
+        color: #111827;
+        font-size: 19px;
+        font-weight: 800;
+    }
+
+    .student-count {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #047857;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    /* ================= TABLE ================= */
+
+    .table-scroll {
+        overflow-x: auto;
+    }
+
+    .faculty-students-panel table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 720px;
+    }
+
+    .faculty-students-panel th {
+        padding: 14px 23px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 800;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        white-space: nowrap;
+    }
+
+    .faculty-students-panel td {
+        padding: 18px 23px;
+        border-top: 1px solid #edf1f5;
+        color: #475569;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .faculty-students-panel tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .faculty-students-panel tbody tr:hover {
+        background: #f8fffc;
+    }
+
+    /* ================= STUDENT NAME ================= */
+
+    .faculty-students-panel td:first-child {
+        color: #111827;
+        font-size: 14px;
+        font-weight: 750;
+    }
+
+    /* ================= SCORE ================= */
+
+    .score-value {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 55px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        background: #f1f5f9;
+        color: #334155;
+        font-size: 12px;
+        font-weight: 750;
+    }
+
+    .muted-empty {
+        color: #94a3b8;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* ================= READINESS ================= */
+
+    .readiness-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .readiness-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    .readiness-ready {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .readiness-ready::before {
+        background: #10b981;
+    }
+
+    .readiness-training {
+        background: #fff7ed;
+        color: #c2410c;
+    }
+
+    .readiness-training::before {
+        background: #f97316;
+    }
+
+    /* ================= PORTFOLIO ================= */
+
+    .portfolio-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 13px;
+        border-radius: 9px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        transition: all 0.2s ease;
+    }
+
+    .portfolio-btn-primary {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .portfolio-btn-primary::after {
+        content: "→";
+        font-size: 14px;
+    }
+
+    .portfolio-btn-primary:hover {
+        background: #059669;
+        color: white;
+        transform: translateX(2px);
+    }
+
+    /* ================= EMPTY STATE ================= */
+
+    .faculty-students-panel td[colspan="4"] {
+        text-align: center;
+        padding: 50px 20px;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 700px) {
+
+        .faculty-dashboard {
+            padding: 18px 12px 35px;
+        }
+
+        .faculty-hero {
+            padding: 25px 22px;
+            border-radius: 18px;
+        }
+
+        .faculty-icon {
+            width: 56px;
+            height: 56px;
+            font-size: 26px;
+        }
+
+        .faculty-hero h1 {
+            font-size: 24px;
+        }
+
+        .panel-heading {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 12px;
+            padding: 19px;
+        }
+
+        .faculty-students-panel th,
+        .faculty-students-panel td {
+            padding-left: 17px;
+            padding-right: 17px;
+        }
+    }
+</style>
+
+
+<div class="faculty-dashboard">
+
+    <!-- ================= HERO ================= -->
+
+    <div class="faculty-hero">
+
+        <div class="faculty-icon">
+            👨‍🏫
+        </div>
+
+        <div class="faculty-hero-content">
+
+            <span class="eyebrow">
+                Faculty Mentorship
+            </span>
+
+            <h1>
+                Faculty Dashboard
+            </h1>
+
+            <p class="dashboard-welcome">
+                Welcome, {{ name }}
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= STUDENTS ================= -->
+
+    <div class="panel faculty-students-panel">
+
+        <div class="panel-heading">
+
+            <div>
+                <span class="eyebrow">
+                    Mentorship
+                </span>
+
+                <h2>
+                    My Students
+                </h2>
+            </div>
+
+            <span class="student-count">
+                {{ students|length }} tracked
+            </span>
+
+        </div>
+
+
+        <div class="table-scroll">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Assessment Score</th>
+                        <th>Placement Readiness</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for student in students %}
+
+                    <tr>
+
+                        <td>
+                            {{ student.name }}
+                        </td>
+
+
+                        <td>
+
+                            {% if student.assessment_score is defined %}
+
+                                <span class="score-value">
+                                    {{ student.assessment_score }}/{{ student.assessment_total }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="muted-empty">
+                                    Not taken
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            {% if student.placement_ready %}
+
+                                <span class="readiness-badge readiness-ready">
+                                    Ready
+                                </span>
+
+                            {% else %}
+
+                                <span class="readiness-badge readiness-training">
+                                    Needs Training
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <a
+                                class="portfolio-btn portfolio-btn-primary"
+                                href="{{ url_for('public_portfolio', student_id=student._id) }}"
+                            >
+                                View Portfolio
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="4" class="muted-empty">
+                            No students are available for tracking.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

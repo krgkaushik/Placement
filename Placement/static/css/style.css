@@ -1,0 +1,743 @@
+/* Placement Portal - Global Styles */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #0f172a, #111827, #1f2937);
+    color: #e2e8f0;
+}
+
+.dashboard-card,
+.learning-card,
+.portfolio-page,
+.profile-card {
+    width: min(1100px, 92vw);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(2, 6, 23, 0.35);
+}
+
+.dashboard-card {
+    padding: 2rem;
+}
+
+.dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard-icon {
+    display: inline-flex;
+    width: 56px;
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+    font-size: 1.8rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.dash-tile {
+    display: block;
+    padding: 1.25rem;
+    border-radius: 16px;
+    background: rgba(15, 118, 110, 0.14);
+    border: 1px solid rgba(45, 212, 191, 0.2);
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.dash-tile:hover {
+    transform: translateY(-2px);
+    border-color: rgba(125, 211, 252, 0.5);
+    text-decoration: none;
+}
+
+.card-link {
+    cursor: pointer;
+}
+
+.assessment-complete {
+    cursor: default;
+    border-color: rgba(52, 211, 153, 0.35);
+    background: rgba(52, 211, 153, 0.12);
+}
+
+.assessment-complete p {
+    color: #a7f3d0;
+    font-weight: 600;
+}
+
+.dash-tile h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.learning-card {
+    padding: 2rem;
+}
+
+.learning-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-panel,
+.recommendation-card,
+.form-card,
+.skill-badge,
+.portfolio-card,
+.summary-box {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+}
+
+.info-panel,
+.form-card,
+.summary-box {
+    padding: 1.25rem;
+}
+
+.recommendation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.recommendation-card {
+    padding: 1.2rem;
+}
+
+.recommendation-card h4 {
+    margin: 0.5rem 0;
+}
+
+.skill-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    margin: 0.2rem 0.35rem 0.2rem 0;
+    font-size: 0.83rem;
+    color: #bfdbfe;
+    background: rgba(59, 130, 246, 0.15);
+}
+
+.form-card form {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea,
+.form-card button {
+    width: 100%;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 10px;
+    padding: 0.8rem 0.9rem;
+    background: rgba(15, 23, 42, 0.7);
+    color: #f8fafc;
+    font: inherit;
+}
+
+.form-card button,
+.portfolio-page .primary-btn {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+}
+
+.portfolio-page {
+    padding: 2rem;
+    margin: 2rem auto;
+}
+
+.portfolio-page .profile-card,
+.portfolio-page .portfolio-card {
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 14px 30px rgba(2, 6, 23, 0.22);
+}
+
+.portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.portfolio-identity {
+    min-width: 0;
+}
+
+.portfolio-identity p {
+    margin-top: 0.35rem;
+    color: #a5b4fc;
+}
+
+.portfolio-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.portfolio-btn {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.6);
+    color: #e2e8f0;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.portfolio-btn:hover {
+    border-color: rgba(125, 211, 252, 0.65);
+    background: rgba(30, 41, 59, 0.85);
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.portfolio-btn-primary {
+    border-color: transparent;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+}
+
+.profile-card {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.portfolio-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.muted-empty {
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.resume-section {
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+}
+
+.resume-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.resume-file-field {
+    display: flex;
+    flex: 1 1 280px;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.resume-file-field label {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.resume-file-field input[type="file"] {
+    width: 100%;
+    min-height: 46px;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.7);
+    color: #e2e8f0;
+    font: inherit;
+}
+
+.resume-file-field input[type="file"]::file-selector-button {
+    margin-right: 0.7rem;
+    padding: 0.45rem 0.75rem;
+    border: 1px solid rgba(129, 140, 248, 0.45);
+    border-radius: 8px;
+    background: rgba(99, 102, 241, 0.22);
+    color: #e0e7ff;
+    cursor: pointer;
+}
+
+.resume-form .primary-btn {
+    padding: 0.8rem 1.1rem;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.resume-form .primary-btn:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+}
+
+.resume-status {
+    margin-top: 0.75rem;
+    color: #a7f3d0;
+    font-size: 0.9rem;
+}
+
+.assessment-page {
+    width: min(900px, 92vw);
+}
+
+.assessment-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.assessment-question {
+    min-width: 0;
+    padding: 1.25rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.65);
+}
+
+.assessment-question legend {
+    width: 100%;
+    padding: 0;
+    color: #f8fafc;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.assessment-question legend span {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: #a5b4fc;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.assessment-options {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 1rem;
+}
+
+.assessment-option {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.55);
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.assessment-option:hover,
+.assessment-option:has(input:checked) {
+    border-color: rgba(129, 140, 248, 0.65);
+    background: rgba(99, 102, 241, 0.18);
+    color: #f8fafc;
+}
+
+.assessment-option input {
+    accent-color: #8b5cf6;
+}
+
+.assessment-submit {
+    justify-self: start;
+    padding: 0.85rem 1.25rem;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.assessment-history-page {
+    width: min(1000px, 92vw);
+}
+
+.history-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.history-actions .primary-btn {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.history-chart-wrap {
+    position: relative;
+    height: 280px;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.65);
+}
+
+.portfolio-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.portfolio-card {
+    padding: 1.2rem;
+}
+
+.portfolio-card h3 {
+    margin-top: 0.8rem;
+}
+
+.proof-tag {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: #bfdbfe;
+    color: #1e3a8a;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.proof-link {
+    display: inline-block;
+    margin-top: 0.9rem;
+    padding: 0.55rem 0.85rem;
+    border: 1px solid rgba(125, 211, 252, 0.35);
+    border-radius: 9px;
+    background: rgba(14, 116, 144, 0.16);
+    color: #bae6fd;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.proof-link:hover {
+    border-color: rgba(125, 211, 252, 0.75);
+    background: rgba(14, 116, 144, 0.3);
+    color: #fff;
+    text-decoration: none;
+}
+
+.portfolio-card h3 {
+    margin-bottom: 0.35rem;
+}
+
+.portfolio-card a {
+    color: #93c5fd;
+}
+
+.empty-state {
+    color: #cbd5e1;
+    padding: 1rem 0;
+}
+
+.analytics-shell {
+    width: min(1200px, 94vw);
+    padding: 2rem;
+    border-radius: 24px;
+    background: rgba(15, 23, 42, 0.82);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+}
+
+.analytics-header {
+    margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+    display: inline-block;
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #a5b4fc;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    padding: 1rem 1.2rem;
+    border-radius: 18px;
+    background: rgba(15, 118, 110, 0.12);
+    border: 1px solid rgba(94, 234, 212, 0.2);
+}
+
+.stat-card span {
+    display: block;
+    color: #cbd5e1;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card strong {
+    font-size: 1.8rem;
+    color: #f8fafc;
+}
+
+.stat-card.emphasis {
+    background: rgba(99, 102, 241, 0.18);
+    border-color: rgba(129, 140, 248, 0.3);
+}
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.panel {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 20px;
+    padding: 1rem 1.2rem;
+}
+
+.chart-panel {
+    min-height: 270px;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.table-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.75rem;
+}
+
+.table-panel th,
+.table-panel td {
+    text-align: left;
+    padding: 0.8rem 0.7rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    color: #e2e8f0;
+}
+
+.table-panel th {
+    color: #cbd5e1;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.table-panel thead {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.table-panel tbody tr {
+    transition: background 0.2s ease;
+}
+
+.table-panel tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.panel-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.student-count {
+    color: #a5b4fc;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.faculty-students-panel {
+    width: 100%;
+}
+
+.table-scroll {
+    overflow-x: auto;
+}
+
+.readiness-badge {
+    display: inline-block;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.readiness-ready {
+    background: rgba(52, 211, 153, 0.16);
+    color: #a7f3d0;
+}
+
+.readiness-training {
+    background: rgba(251, 191, 36, 0.16);
+    color: #fde68a;
+}
+
+.match-score {
+    min-width: 130px;
+}
+
+.match-score-label {
+    display: inline-block;
+    margin-bottom: 0.4rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid rgba(52, 211, 153, 0.28);
+    border-radius: 999px;
+    background: rgba(52, 211, 153, 0.14);
+    color: #bbf7d0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.match-score-track {
+    width: 100%;
+    height: 6px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.18);
+}
+
+.match-score-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #34d399, #22d3ee);
+}
+
+.status-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.status-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(59, 130, 246, 0.18);
+    color: #bfdbfe;
+    cursor: pointer;
+}
+
+.status-btn.secondary {
+    background: rgba(248, 113, 113, 0.18);
+    color: #fecaca;
+}
+
+.status-btn.success {
+    background: rgba(52, 211, 153, 0.18);
+    color: #bbf7d0;
+}
+
+@media (max-width: 768px) {
+    .section-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .learning-header,
+    .analytics-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .portfolio-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .portfolio-actions {
+        justify-content: flex-start;
+    }
+
+    .portfolio-summary-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .panel-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .analytics-shell {
+        padding: 1rem;
+    }
+
+    .resume-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .resume-form .primary-btn {
+        width: 100%;
+    }
+}

@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+{% block title %}Job Opportunities — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .jobs-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px 55px;
+    }
+
+    /* ================= HEADER ================= */
+
+    .jobs-hero {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 30px 34px;
+        margin-bottom: 24px;
+        border-radius: 23px;
+        background: linear-gradient(135deg, #0f172a, #164e63, #0369a1);
+        color: white;
+        box-shadow: 0 16px 38px rgba(3, 105, 161, 0.16);
+    }
+
+    .jobs-hero::after {
+        content: "";
+        position: absolute;
+        width: 290px;
+        height: 290px;
+        right: -110px;
+        top: -150px;
+        border: 50px solid rgba(255,255,255,0.06);
+        border-radius: 50%;
+    }
+
+    .jobs-icon {
+        position: relative;
+        z-index: 2;
+        width: 62px;
+        height: 62px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.13);
+        font-size: 28px;
+    }
+
+    .jobs-header-content {
+        position: relative;
+        z-index: 2;
+        flex: 1;
+    }
+
+    .eyebrow {
+        display: block;
+        margin-bottom: 6px;
+        color: #bae6fd;
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .jobs-header-content h1 {
+        margin: 0;
+        font-size: 29px;
+        font-weight: 850;
+        letter-spacing: -0.7px;
+    }
+
+    .jobs-header-content p {
+        margin: 7px 0 0;
+        color: #dbeafe;
+        font-size: 13px;
+    }
+
+    .btn-logout {
+        position: relative;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 15px;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 10px;
+        background: rgba(255,255,255,0.09);
+        color: white;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+        background: white;
+        color: #0369a1;
+        transform: translateY(-2px);
+    }
+
+    /* ================= JOB GRID ================= */
+
+    .jobs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    /* ================= JOB CARD ================= */
+
+    .job-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 290px;
+        padding: 23px;
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        background: white;
+        box-shadow: 0 7px 24px rgba(15, 23, 42, 0.05);
+        transition: all 0.22s ease;
+    }
+
+    .job-card:hover {
+        transform: translateY(-5px);
+        border-color: #bae6fd;
+        box-shadow: 0 16px 32px rgba(15, 23, 42, 0.09);
+    }
+
+    /* ================= CARD TOP ================= */
+
+    .job-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .job-company-icon {
+        width: 43px;
+        height: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: #f0f9ff;
+        color: #0284c7;
+        font-size: 19px;
+    }
+
+    .skill-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #ecfeff;
+        color: #0891b2;
+        font-size: 10px;
+        font-weight: 850;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    /* ================= TITLE ================= */
+
+    .job-card h4 {
+        margin: 15px 0 7px;
+        color: #111827;
+        font-size: 18px;
+        font-weight: 850;
+        letter-spacing: -0.3px;
+    }
+
+    .job-description {
+        display: -webkit-box;
+        overflow: hidden;
+        margin: 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.65;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    /* ================= SKILLS ================= */
+
+    .job-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 17px;
+    }
+
+    .job-skills .skill-badge {
+        background: #f1f5f9;
+        color: #475569;
+        text-transform: none;
+        letter-spacing: 0;
+        font-weight: 700;
+    }
+
+    /* ================= CARD FOOTER ================= */
+
+    .job-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding-top: 17px;
+        margin-top: auto;
+        border-top: 1px solid #edf1f5;
+    }
+
+    .match-label {
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .primary-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 9px;
+        background: linear-gradient(135deg, #0284c7, #0369a1);
+        color: white;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 7px 16px rgba(3, 105, 161, 0.16);
+        transition: all 0.2s ease;
+    }
+
+    .primary-btn::after {
+        content: "→";
+        font-size: 14px;
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(3, 105, 161, 0.24);
+    }
+
+    .primary-btn:active {
+        transform: translateY(0);
+    }
+
+    /* ================= EMPTY ================= */
+
+    .info-panel {
+        padding: 45px 25px;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        background: white;
+        text-align: center;
+        box-shadow: 0 7px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .info-panel::before {
+        content: "🔎";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 55px;
+        height: 55px;
+        margin: 0 auto 15px;
+        border-radius: 15px;
+        background: #f0f9ff;
+        font-size: 23px;
+    }
+
+    .info-panel p {
+        margin: 0;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 800px) {
+        .jobs-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .jobs-page {
+            padding: 18px 12px 35px;
+        }
+
+        .jobs-hero {
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 25px 22px;
+        }
+
+        .jobs-header-content h1 {
+            font-size: 25px;
+        }
+
+        .btn-logout {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .job-card {
+            padding: 20px;
+        }
+
+        .job-card-footer {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .primary-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="jobs-page">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="jobs-hero">
+
+        <div class="jobs-icon">
+            💼
+        </div>
+
+        <div class="jobs-header-content">
+
+            <span class="eyebrow">
+                Career Opportunities
+            </span>
+
+            <h1>
+                Recommended Opportunities
+            </h1>
+
+            <p>
+                Jobs matched to your current skill set and career profile.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('student.dashboard') }}"
+            class="btn-logout"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ================= JOBS ================= -->
+
+    {% if jobs %}
+
+    <div class="jobs-grid">
+
+        {% for job in jobs %}
+
+        <div class="job-card">
+
+            <div class="job-card-top">
+
+                <div class="job-company-icon">
+                    🏢
+                </div>
+
+                <span class="skill-badge">
+                    {{ job.type }}
+                </span>
+
+            </div>
+
+
+            <h4>
+                {{ job.title }}
+            </h4>
+
+
+            <p class="job-description">
+                {{ job.description }}
+            </p>
+
+
+            <div class="job-skills">
+
+                {% for skill in job.required_skills %}
+
+                    <span class="skill-badge">
+                        {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="job-card-footer">
+
+                <span class="match-label">
+                    Skills matched to your profile
+                </span>
+
+                <form
+                    method="POST"
+                    action="{{ url_for('student.apply_job') }}"
+                >
+
+                    <input
+                        type="hidden"
+                        name="job_id"
+                        value="{{ job._id }}"
+                    >
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                    >
+                        Apply Now
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <!-- ================= EMPTY ================= -->
+
+    <div class="info-panel">
+
+        <p>
+            No jobs currently match your skill profile.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Placement Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+    <style>
+        /* ── Reset & Base ── */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+        }
+
+        a {
+            color: #7c83ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── Top Nav ── */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .navbar-links a {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            transition: color .2s;
+        }
+
+        .navbar-links a:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .navbar-user {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(124, 131, 255, 0.15);
+            color: #a5aaff;
+            border: 1px solid rgba(124, 131, 255, 0.25);
+        }
+
+        .btn-logout {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(255, 99, 99, 0.12);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 99, 99, 0.25);
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 99, 99, 0.25);
+            text-decoration: none;
+        }
+
+        /* ── Flash Messages ── */
+        .flash-container {
+            padding: 0 2rem;
+        }
+
+        .flash {
+            margin: 1rem auto;
+            max-width: 600px;
+            padding: 0.75rem 1.2rem;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .flash-success {
+            background: rgba(72, 199, 142, 0.15);
+            color: #48c78e;
+            border: 1px solid rgba(72, 199, 142, 0.3);
+        }
+
+        .flash-danger {
+            background: rgba(255, 99, 99, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 99, 99, 0.3);
+        }
+
+        .flash-warning {
+            background: rgba(255, 183, 77, 0.15);
+            color: #ffb74d;
+            border: 1px solid rgba(255, 183, 77, 0.3);
+        }
+
+        .flash-info {
+            background: rgba(100, 181, 246, 0.15);
+            color: #64b5f6;
+            border: 1px solid rgba(100, 181, 246, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Content ── */
+        .page-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 54px);
+            padding: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="navbar-brand">🎓 Placement Portal</a>
+        <div class="navbar-links">
+            {% if session.get('user_id') %}
+            <span class="navbar-user">{{ session.get('name', 'User') }}</span>
+            <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}">Login</a>
+            <a href="{{ url_for('auth.register') }}">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Page Content -->
+    <div class="page-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

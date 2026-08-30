@@ -1,0 +1,766 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .student-dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px 55px;
+    }
+
+    /* ================= HERO ================= */
+
+    .student-hero {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 30px 34px;
+        margin-bottom: 22px;
+        border-radius: 23px;
+        background: linear-gradient(135deg, #0f172a, #312e81, #4f46e5);
+        color: white;
+        box-shadow: 0 16px 38px rgba(49, 46, 129, 0.18);
+    }
+
+    .student-hero::before {
+        content: "";
+        position: absolute;
+        width: 320px;
+        height: 320px;
+        right: -130px;
+        top: -170px;
+        border: 55px solid rgba(255,255,255,0.055);
+        border-radius: 50%;
+    }
+
+    .student-hero::after {
+        content: "";
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        right: 180px;
+        bottom: -80px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.04);
+    }
+
+    .student-avatar {
+        position: relative;
+        z-index: 2;
+        width: 66px;
+        height: 66px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: rgba(255,255,255,0.11);
+        border: 1px solid rgba(255,255,255,0.13);
+        font-size: 30px;
+    }
+
+    .student-hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .student-hero-content h1 {
+        margin: 0;
+        font-size: 30px;
+        font-weight: 850;
+        letter-spacing: -0.8px;
+    }
+
+    .student-hero-content p {
+        margin: 7px 0 0;
+        color: #cbd5e1;
+        font-size: 13px;
+    }
+
+    .hero-label {
+        display: block;
+        margin-bottom: 5px;
+        color: #a5b4fc;
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    /* ================= SECTION ================= */
+
+    .dashboard-section-title {
+        margin: 25px 2px 13px;
+        color: #172033;
+        font-size: 18px;
+        font-weight: 850;
+    }
+
+    /* ================= ACTION GRID ================= */
+
+    .student-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .student-action {
+        position: relative;
+        overflow: hidden;
+        min-height: 145px;
+        padding: 21px;
+        border: 1px solid #e2e8f0;
+        border-radius: 17px;
+        background: white;
+        color: inherit;
+        text-decoration: none;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.045);
+        transition: all 0.22s ease;
+    }
+
+    .student-action::after {
+        content: "→";
+        position: absolute;
+        right: 18px;
+        bottom: 16px;
+        color: #cbd5e1;
+        font-size: 18px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+    }
+
+    .student-action:hover {
+        transform: translateY(-5px);
+        border-color: #c7d2fe;
+        box-shadow: 0 15px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .student-action:hover::after {
+        right: 14px;
+        color: #4f46e5;
+    }
+
+    .action-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+        border-radius: 11px;
+        background: #eef2ff;
+        font-size: 19px;
+    }
+
+    .student-action:nth-child(2) .action-icon {
+        background: #eff6ff;
+    }
+
+    .student-action:nth-child(3) .action-icon {
+        background: #ecfeff;
+    }
+
+    .student-action:nth-child(4) .action-icon {
+        background: #f5f3ff;
+    }
+
+    .student-action h3 {
+        margin: 0 0 6px;
+        color: #172033;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .student-action p {
+        max-width: 210px;
+        margin: 0;
+        color: #64748b;
+        font-size: 11px;
+        line-height: 1.55;
+    }
+
+    /* ================= ASSESSMENT ================= */
+
+    .assessment-complete {
+        position: relative;
+        overflow: hidden;
+        min-height: 145px;
+        padding: 21px;
+        border: 1px solid #bbf7d0;
+        border-radius: 17px;
+        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.035);
+    }
+
+    .assessment-complete::after {
+        content: "✓";
+        position: absolute;
+        right: 18px;
+        bottom: 13px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #dcfce7;
+        color: #16a34a;
+        font-size: 16px;
+        font-weight: 900;
+    }
+
+    .assessment-complete h3 {
+        margin: 0 0 7px;
+        color: #166534;
+        font-size: 14px;
+        font-weight: 800;
+    }
+
+    .assessment-complete p {
+        margin: 0;
+        color: #4d7c5b;
+        font-size: 11px;
+        line-height: 1.55;
+    }
+
+    /* ================= RESUME ================= */
+
+    .resume-card {
+        margin-top: 22px;
+        padding: 25px;
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        background: white;
+        box-shadow: 0 7px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .resume-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-bottom: 19px;
+    }
+
+    .resume-icon {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: #fef2f2;
+        color: #dc2626;
+        font-size: 20px;
+    }
+
+    .resume-header h2 {
+        margin: 0;
+        color: #172033;
+        font-size: 17px;
+        font-weight: 850;
+    }
+
+    .resume-header p {
+        margin: 3px 0 0;
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    .resume-form {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border: 1px dashed #cbd5e1;
+        border-radius: 13px;
+        background: #f8fafc;
+    }
+
+    .resume-file-field {
+        flex: 1;
+    }
+
+    .resume-file-field label {
+        display: block;
+        margin-bottom: 7px;
+        color: #334155;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .resume-file-field input[type="file"] {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 9px;
+        border: 1px solid #dbe2ea;
+        border-radius: 8px;
+        background: white;
+        color: #64748b;
+        font-family: inherit;
+        font-size: 11px;
+        cursor: pointer;
+    }
+
+    .primary-btn {
+        align-self: flex-end;
+        padding: 11px 18px;
+        border: none;
+        border-radius: 9px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        white-space: nowrap;
+        box-shadow: 0 7px 16px rgba(79,70,229,0.17);
+        transition: all 0.2s ease;
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(79,70,229,0.25);
+    }
+
+    .resume-status {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin: 14px 0 0;
+        color: #15803d;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .resume-status::before {
+        content: "✓";
+        width: 19px;
+        height: 19px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #dcfce7;
+        color: #16a34a;
+        font-weight: 900;
+    }
+
+    .skills-card {
+        margin-top: 22px;
+        padding: 25px;
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        background: white;
+        box-shadow: 0 7px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .skills-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        margin-bottom: 19px;
+    }
+
+    .skills-icon {
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: #ecfeff;
+        color: #0891b2;
+        font-size: 20px;
+    }
+
+    .skills-header h2 {
+        margin: 0;
+        color: #172033;
+        font-size: 17px;
+        font-weight: 850;
+    }
+
+    .skills-header p {
+        margin: 3px 0 0;
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .skill-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #ecfeff;
+        color: #0e7490;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .skills-empty {
+        margin: 0 0 16px;
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    .skills-form {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+    }
+
+    .skills-field {
+        flex: 1;
+    }
+
+    .skills-field label {
+        display: block;
+        margin-bottom: 7px;
+        color: #334155;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .skills-field input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px 13px;
+        border: 1px solid #dbe2ea;
+        border-radius: 9px;
+        outline: none;
+        background: #f8fafc;
+        color: #334155;
+        font-family: inherit;
+        font-size: 12px;
+    }
+
+    .skills-field input:focus {
+        border-color: #0891b2;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.09);
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 1000px) {
+        .student-actions {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 650px) {
+        .student-dashboard {
+            padding: 18px 12px 35px;
+        }
+
+        .student-hero {
+            align-items: flex-start;
+            padding: 25px 22px;
+        }
+
+        .student-hero-content h1 {
+            font-size: 25px;
+        }
+
+        .student-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .resume-form {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .skills-form {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .primary-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="student-dashboard">
+
+    <!-- ================= HERO ================= -->
+
+    <div class="student-hero">
+
+        <div class="student-avatar">
+            🎓
+        </div>
+
+        <div class="student-hero-content">
+
+            <span class="hero-label">
+                Student Placement Portal
+            </span>
+
+            <h1>
+                Student Dashboard
+            </h1>
+
+            <p>
+                Welcome back, {{ name }}. Continue building your placement readiness.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ACTIONS ================= -->
+
+    <h2 class="dashboard-section-title">
+        Placement Workspace
+    </h2>
+
+    <div class="student-actions">
+
+        <a
+            href="{{ url_for('student.learning_hub') }}"
+            class="card-link student-action"
+        >
+            <div class="action-icon">
+                📘
+            </div>
+
+            <h3>
+                Learning Hub
+            </h3>
+
+            <p>
+                Review skill gaps and recommended training.
+            </p>
+        </a>
+
+
+        <a
+            href="{{ url_for('student.gap_report') }}"
+            class="card-link student-action"
+        >
+            <div class="action-icon">
+                📊
+            </div>
+
+            <h3>
+                Gap Report
+            </h3>
+
+            <p>
+                View your AI-powered skill-gap analysis.
+            </p>
+        </a>
+
+
+        <a
+            href="{{ url_for('student.opportunities') }}"
+            class="card-link student-action"
+        >
+            <div class="action-icon">
+                💼
+            </div>
+
+            <h3>
+                Opportunities
+            </h3>
+
+            <p>
+                Browse roles matched to your current skills.
+            </p>
+        </a>
+
+
+        <a
+            href="{{ url_for('student.student_portfolio') }}"
+            class="card-link student-action"
+        >
+            <div class="action-icon">
+                📁
+            </div>
+
+            <h3>
+                Portfolio
+            </h3>
+
+            <p>
+                Manage and share your projects and achievements.
+            </p>
+        </a>
+
+
+        <a
+            href="{{ url_for('student.assessment') }}"
+            class="card-link student-action"
+        >
+
+            <div class="action-icon">
+                🧠
+            </div>
+
+            <h3>
+                Take Assessment
+            </h3>
+
+            <p>
+                Practice with a fresh question set each time.
+            </p>
+
+        </a>
+
+        <a href="{{ url_for('student.assessment_history') }}" class="card-link student-action">
+            <div class="action-icon">📈</div>
+            <h3>Assessment History</h3>
+            <p>Track your progress across every attempt.</p>
+        </a>
+
+    </div>
+
+
+    <!-- ================= SKILLS ================= -->
+
+    <div class="skills-card">
+
+        <div class="skills-header">
+
+            <div class="skills-icon">
+                🧠
+            </div>
+
+            <div>
+
+                <h2>
+                    Skills
+                </h2>
+
+                <p>
+                    Keep your skills current for better opportunity matches.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% set current_skills = student.skills_array or student.skills or [] %}
+        {% if current_skills %}
+        <div class="skills-list">
+            {% for skill in current_skills %}
+                <span class="skill-badge">{{ skill }}</span>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="skills-empty">No skills listed yet.</p>
+        {% endif %}
+
+        <form
+            class="skills-form"
+            action="{{ url_for('student.update_skills') }}"
+            method="post"
+        >
+
+            <div class="skills-field">
+                <label for="skills">Your skills</label>
+                <input
+                    id="skills"
+                    name="skills"
+                    type="text"
+                    value="{{ current_skills|join(', ') }}"
+                    placeholder="Python, SQL, Communication"
+                    autocomplete="off"
+                >
+            </div>
+
+            <button type="submit" class="primary-btn">
+                Save Skills
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= RESUME ================= -->
+
+    <div class="resume-card">
+
+        <div class="resume-header">
+
+            <div class="resume-icon">
+                📄
+            </div>
+
+            <div>
+
+                <h2>
+                    Resume
+                </h2>
+
+                <p>
+                    Keep your latest resume available for recruiters.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <form
+            class="resume-form"
+            action="{{ url_for('student.upload_resume') }}"
+            method="post"
+            enctype="multipart/form-data"
+        >
+
+            <div class="resume-file-field">
+
+                <label for="resume">
+                    Choose PDF Resume
+                </label>
+
+                <input
+                    id="resume"
+                    name="resume"
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Upload Resume
+            </button>
+
+        </form>
+
+
+        {% if student.resume_path %}
+
+        <p class="resume-status">
+            A resume is already uploaded and available to recruiters.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

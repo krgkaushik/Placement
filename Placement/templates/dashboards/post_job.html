@@ -1,0 +1,445 @@
+{% extends "base.html" %}
+{% block title %}Post a Job — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .job-post-page {
+        max-width: 1050px;
+        margin: 0 auto;
+        padding: 30px 20px 55px;
+    }
+
+    /* ================= HERO ================= */
+
+    .job-post-hero {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 30px 34px;
+        margin-bottom: 22px;
+        border-radius: 23px;
+        background: linear-gradient(135deg, #0f172a, #1e3a8a, #4338ca);
+        color: white;
+        box-shadow: 0 16px 38px rgba(30, 58, 138, 0.18);
+    }
+
+    .job-post-hero::after {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        right: -110px;
+        top: -150px;
+        border: 50px solid rgba(255,255,255,0.06);
+        border-radius: 50%;
+    }
+
+    .job-post-icon {
+        position: relative;
+        z-index: 2;
+        width: 62px;
+        height: 62px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.13);
+        font-size: 28px;
+    }
+
+    .job-post-header {
+        position: relative;
+        z-index: 2;
+        flex: 1;
+    }
+
+    .eyebrow {
+        display: block;
+        margin-bottom: 6px;
+        color: #a5b4fc;
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .job-post-header h1 {
+        margin: 0;
+        font-size: 29px;
+        font-weight: 850;
+        letter-spacing: -0.7px;
+    }
+
+    .job-post-header p {
+        margin: 7px 0 0;
+        color: #cbd5e1;
+        font-size: 13px;
+    }
+
+    .btn-logout {
+        position: relative;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 15px;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 10px;
+        background: rgba(255,255,255,0.09);
+        color: white;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+        background: white;
+        color: #312e81;
+        transform: translateY(-2px);
+    }
+
+    /* ================= FORM CARD ================= */
+
+    .job-form-card {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        background: white;
+        box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+    }
+
+    .form-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 20px;
+        margin-bottom: 22px;
+        border-bottom: 1px solid #edf1f5;
+    }
+
+    .form-heading-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 18px;
+    }
+
+    .form-heading h2 {
+        margin: 0;
+        color: #172033;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .form-heading p {
+        margin: 3px 0 0;
+        color: #94a3b8;
+        font-size: 11px;
+    }
+
+    /* ================= FORM ================= */
+
+    .job-form {
+        display: grid;
+        gap: 17px;
+    }
+
+    .form-group {
+        display: grid;
+        gap: 7px;
+    }
+
+    .form-group label {
+        color: #334155;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 13px;
+        border: 1px solid #dbe2ea;
+        border-radius: 10px;
+        outline: none;
+        background: #f8fafc;
+        color: #1e293b;
+        font-family: inherit;
+        font-size: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+        color: #94a3b8;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.09);
+    }
+
+    .form-group textarea {
+        min-height: 130px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .form-group select {
+        cursor: pointer;
+    }
+
+    /* ================= FIELD HINT ================= */
+
+    .field-hint {
+        color: #94a3b8;
+        font-size: 10px;
+        line-height: 1.4;
+    }
+
+    /* ================= PUBLISH ================= */
+
+    .publish-section {
+        padding-top: 5px;
+    }
+
+    .publish-btn {
+        width: 100%;
+        padding: 13px 18px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 8px 18px rgba(79,70,229,0.18);
+        transition: all 0.2s ease;
+    }
+
+    .publish-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(79,70,229,0.25);
+    }
+
+    .publish-btn:active {
+        transform: translateY(0);
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 700px) {
+
+        .job-post-page {
+            padding: 18px 12px 35px;
+        }
+
+        .job-post-hero {
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 25px 22px;
+        }
+
+        .job-post-header h1 {
+            font-size: 25px;
+        }
+
+        .btn-logout {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .job-form-card {
+            padding: 21px;
+        }
+    }
+</style>
+
+
+<div class="job-post-page">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="job-post-hero">
+
+        <div class="job-post-icon">
+            💼
+        </div>
+
+        <div class="job-post-header">
+
+            <span class="eyebrow">
+                Employer Portal
+            </span>
+
+            <h1>
+                Post a New Opportunity
+            </h1>
+
+            <p>
+                Find the right talent by describing your role and required expertise.
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('company.dashboard') }}"
+            class="btn-logout"
+        >
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- ================= FORM ================= -->
+
+    <div class="job-form-card">
+
+        <div class="form-heading">
+
+            <div class="form-heading-icon">
+                📝
+            </div>
+
+            <div>
+                <h2>
+                    Opportunity Details
+                </h2>
+
+                <p>
+                    Provide accurate information to attract suitable candidates.
+                </p>
+            </div>
+
+        </div>
+
+
+        <form method="POST" class="job-form">
+
+            <!-- ROLE TITLE -->
+
+            <div class="form-group">
+
+                <label>
+                    Role Title
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="e.g. Software Engineer Intern"
+                    required
+                >
+
+            </div>
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="form-group">
+
+                <label>
+                    Job Description
+                </label>
+
+                <textarea
+                    name="description"
+                    rows="5"
+                    placeholder="Describe the responsibilities, requirements, and expectations for this role..."
+                    required
+                ></textarea>
+
+                <span class="field-hint">
+                    Include responsibilities, qualifications, and what candidates will work on.
+                </span>
+
+            </div>
+
+
+            <!-- TYPE -->
+
+            <div class="form-group">
+
+                <label>
+                    Opportunity Type
+                </label>
+
+                <select name="type">
+
+                    <option value="Internship">
+                        Internship
+                    </option>
+
+                    <option value="Full-Time">
+                        Full-Time
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SKILLS -->
+
+            <div class="form-group">
+
+                <label>
+                    Required Skills
+                </label>
+
+                <input
+                    type="text"
+                    name="required_skills"
+                    placeholder="Python, SQL, Machine Learning, React"
+                    required
+                >
+
+                <span class="field-hint">
+                    Add skills separated by commas. These will be used for candidate matching.
+                </span>
+
+            </div>
+
+
+            <!-- PUBLISH -->
+
+            <div class="publish-section">
+
+                <button
+                    type="submit"
+                    class="publish-btn"
+                >
+                    🚀 Publish Job
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

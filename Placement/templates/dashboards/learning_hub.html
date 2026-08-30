@@ -1,0 +1,667 @@
+{% extends "base.html" %}
+{% block title %}Learning Hub — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .learning-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px 20px 55px;
+    }
+
+    /* ================= HEADER ================= */
+
+    .learning-hero {
+        position: relative;
+        overflow: hidden;
+        padding: 32px 35px;
+        margin-bottom: 22px;
+        border-radius: 23px;
+        background: linear-gradient(135deg, #111827, #312e81 65%, #4338ca);
+        color: white;
+        box-shadow: 0 16px 38px rgba(49, 46, 129, 0.18);
+    }
+
+    .learning-hero::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        right: -100px;
+        top: -150px;
+        border: 55px solid rgba(255,255,255,0.055);
+        border-radius: 50%;
+    }
+
+    .learning-hero-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .learning-hero h1 {
+        margin: 0;
+        font-size: 31px;
+        font-weight: 850;
+        letter-spacing: -0.8px;
+    }
+
+    .learning-hero p {
+        margin: 8px 0 0;
+        color: #cbd5e1;
+        font-size: 14px;
+    }
+
+    .hero-icon {
+        width: 58px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.11);
+        border: 1px solid rgba(255,255,255,0.12);
+        font-size: 27px;
+    }
+
+    .btn-logout {
+        position: relative;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 15px;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 10px;
+        background: rgba(255,255,255,0.09);
+        color: white;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+    }
+
+    .btn-logout:hover {
+        background: white;
+        color: #312e81;
+        transform: translateY(-2px);
+    }
+
+    /* ================= GENERAL ================= */
+
+    .section-title {
+        margin: 26px 2px 13px;
+        color: #111827;
+        font-size: 18px;
+        font-weight: 850;
+    }
+
+    .section-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 0.8fr;
+        gap: 17px;
+    }
+
+    .info-panel,
+    .summary-box,
+    .form-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 6px 22px rgba(15, 23, 42, 0.045);
+    }
+
+    .info-panel,
+    .summary-box {
+        padding: 23px;
+    }
+
+    .info-panel h3,
+    .summary-box h3,
+    .form-card h3 {
+        margin: 0 0 12px;
+        color: #172033;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .info-panel > p,
+    .summary-box > p {
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    /* ================= SKILLS ================= */
+
+    .skill-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 17px;
+    }
+
+    .skill-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    /* ================= SCORES ================= */
+
+    .score-row {
+        margin-bottom: 15px;
+    }
+
+    .score-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .score-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .score-track {
+        height: 7px;
+        overflow: hidden;
+        border-radius: 99px;
+        background: #e5e7eb;
+    }
+
+    .score-fill {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    }
+
+    /* ================= RECOMMENDATIONS ================= */
+
+    .recommendation-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 22px;
+    }
+
+    .recommendation-card {
+        position: relative;
+        padding: 21px;
+        border: 1px solid #e2e8f0;
+        border-radius: 17px;
+        background: white;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+        transition: all 0.22s ease;
+    }
+
+    .recommendation-card:hover {
+        transform: translateY(-4px);
+        border-color: #c7d2fe;
+        box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+    }
+
+    .recommendation-card h4 {
+        margin: 14px 0 7px;
+        color: #111827;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .recommendation-card p {
+        margin: 5px 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .recommendation-card p:last-child {
+        margin-top: 10px;
+        color: #475569;
+    }
+
+    /* ================= PROOF OF WORK ================= */
+
+    .bottom-grid {
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 17px;
+        margin-top: 22px;
+    }
+
+    .form-card {
+        padding: 24px;
+    }
+
+    .form-card h3 {
+        margin-bottom: 18px;
+    }
+
+    .form-card form {
+        display: grid;
+        gap: 12px;
+    }
+
+    .form-card input,
+    .form-card select,
+    .form-card textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 11px 13px;
+        border: 1px solid #dbe2ea;
+        border-radius: 9px;
+        outline: none;
+        background: #f8fafc;
+        color: #334155;
+        font-family: inherit;
+        font-size: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .form-card input:focus,
+    .form-card select:focus,
+    .form-card textarea:focus {
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.09);
+    }
+
+    .form-card textarea {
+        resize: vertical;
+        min-height: 95px;
+    }
+
+    .form-card button {
+        padding: 11px 16px;
+        border: none;
+        border-radius: 9px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .form-card button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 9px 20px rgba(79,70,229,0.2);
+    }
+
+    /* ================= PORTFOLIO ================= */
+
+    .portfolio-item {
+        padding: 13px 0;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .portfolio-item:last-child {
+        border-bottom: none;
+    }
+
+    .portfolio-item strong {
+        display: block;
+        color: #1e293b;
+        font-size: 13px;
+        font-weight: 800;
+        margin-bottom: 4px;
+    }
+
+    .portfolio-type {
+        display: inline-flex;
+        padding: 4px 8px;
+        border-radius: 6px;
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 750;
+        text-transform: capitalize;
+    }
+
+    .empty-text {
+        color: #94a3b8 !important;
+        font-size: 12px !important;
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 900px) {
+        .section-grid,
+        .bottom-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .recommendation-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .learning-page {
+            padding: 18px 12px 35px;
+        }
+
+        .learning-hero {
+            padding: 25px 22px;
+        }
+
+        .learning-hero-content {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .learning-hero h1 {
+            font-size: 26px;
+        }
+
+        .btn-logout {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .recommendation-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+<div class="learning-page">
+
+    <!-- ================= HERO ================= -->
+
+    <div class="learning-hero">
+
+        <div class="learning-hero-content">
+
+            <div class="hero-icon">
+                📚
+            </div>
+
+            <div style="flex: 1;">
+
+                <h1>
+                    Learning Hub
+                </h1>
+
+                <p>
+                    Build the skills you need for your target placement.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('student.dashboard') }}"
+                class="btn-logout"
+            >
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SKILL GAP ================= -->
+
+    <h2 class="section-title">
+        Your Learning Overview
+    </h2>
+
+    <div class="section-grid">
+
+        <div class="info-panel">
+
+            <span class="eyebrow">
+                Skill Gap Analysis
+            </span>
+
+            <h3>
+                What should you focus on?
+            </h3>
+
+            {% if gap_report.summary %}
+
+                <p>
+                    {{ gap_report.summary }}
+                </p>
+
+            {% else %}
+
+                <p>
+                    You are on a strong path. Keep building your most
+                    critical skills.
+                </p>
+
+            {% endif %}
+
+
+            <div class="skill-badges">
+
+                {% for skill in missing_skills %}
+
+                    <span class="skill-badge">
+                        {{ skill }}
+                    </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= SCORES ================= -->
+
+        <div class="summary-box">
+
+            <span class="eyebrow">
+                Performance
+            </span>
+
+            <h3>
+                Current Scores
+            </h3>
+
+            {% if scores %}
+
+                {% for skill, score in scores.items() %}
+
+                    <div class="score-row">
+
+                        <div class="score-info">
+
+                            <span>
+                                {{ skill }}
+                            </span>
+
+                            <span>
+                                {{ score }}%
+                            </span>
+
+                        </div>
+
+                        <div class="score-track">
+
+                            <span
+                                class="score-fill"
+                                style="width: {{ score }}%;"
+                            ></span>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>
+                    No assessment scores added yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= RECOMMENDED COURSES ================= -->
+
+    <h2 class="section-title">
+        Recommended Training
+    </h2>
+
+    <div class="recommendation-grid">
+
+        {% for course in recommended_courses %}
+
+        <div class="recommendation-card">
+
+            <span class="skill-badge">
+                {{ course.skill }}
+            </span>
+
+            <h4>
+                {{ course.title }}
+            </h4>
+
+            <p>
+                {{ course.provider }} • {{ course.duration }}
+            </p>
+
+            <p>
+                {{ course.description }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ================= PROOF OF WORK ================= -->
+
+    <div class="bottom-grid">
+
+        <div class="form-card">
+
+            <span class="eyebrow">
+                Portfolio Builder
+            </span>
+
+            <h3>
+                Add Proof of Work
+            </h3>
+
+            <form method="POST">
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Course / Project title"
+                    required
+                >
+
+                <select name="type">
+
+                    <option value="certificate">
+                        Certificate
+                    </option>
+
+                    <option value="project">
+                        Project
+                    </option>
+
+                    <option value="github">
+                        GitHub Link
+                    </option>
+
+                </select>
+
+                <input
+                    type="url"
+                    name="link"
+                    placeholder="https://..."
+                    required
+                >
+
+                <textarea
+                    name="description"
+                    rows="4"
+                    placeholder="Describe what you completed"
+                ></textarea>
+
+                <button type="submit">
+                    Save to Portfolio
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- ================= PORTFOLIO SNAPSHOT ================= -->
+
+        <div class="summary-box">
+
+            <span class="eyebrow">
+                Portfolio
+            </span>
+
+            <h3>
+                Portfolio Snapshot
+            </h3>
+
+            {% if portfolio %}
+
+                {% for item in portfolio[-3:] %}
+
+                    <div class="portfolio-item">
+
+                        <strong>
+                            {{ item.title }}
+                        </strong>
+
+                        <span class="portfolio-type">
+                            {{ item.type }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="empty-text">
+                    No proof of work submitted yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

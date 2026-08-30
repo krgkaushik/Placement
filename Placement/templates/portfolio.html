@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}{{ student.name if student else 'Student Portfolio' }} — Portfolio{% endblock %}
+
+{% block content %}
+<style>
+    .portfolio-shell { width: min(1180px, 94vw); margin: 2rem auto; }
+    .portfolio-hero, .portfolio-card { border: 1px solid rgba(148, 163, 184, .2); border-radius: 18px; background: rgba(15, 23, 42, .68); box-shadow: 0 18px 42px rgba(2, 6, 23, .22); }
+    .portfolio-hero { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; padding: 2.5rem; background: linear-gradient(125deg, rgba(15, 23, 42, .96), rgba(14, 116, 144, .72)); }
+    .portfolio-kicker { margin: 0 0 .5rem; color: #67e8f9; font-size: .75rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .portfolio-hero h1 { margin: 0; color: #f8fafc; font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1; }
+    .portfolio-hero p { max-width: 650px; margin: .85rem 0 0; color: #cbd5e1; }
+    .portfolio-actions, .portfolio-links { display: flex; flex-wrap: wrap; gap: .65rem; }
+    .portfolio-btn { display: inline-block; padding: .7rem .95rem; border: 1px solid rgba(148, 163, 184, .3); border-radius: 9px; color: #e2e8f0; text-decoration: none; font-weight: 700; }
+    .portfolio-btn-primary { border-color: transparent; background: #06b6d4; color: #082f49; }
+    .portfolio-nav { display: flex; flex-wrap: wrap; gap: .35rem; padding: 1rem 0; }
+    .portfolio-nav a { padding: .45rem .65rem; color: #94a3b8; font-size: .85rem; text-decoration: none; }
+    .portfolio-nav a:hover { color: #67e8f9; }
+    .portfolio-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 1rem; }
+    .portfolio-card { padding: 1.35rem; scroll-margin-top: 1rem; }
+    .portfolio-card-wide { grid-column: 1 / -1; }
+    .portfolio-card h2 { margin: 0 0 .8rem; color: #f8fafc; font-size: 1.2rem; }
+    .portfolio-card h3 { margin: .25rem 0; color: #f8fafc; font-size: 1rem; }
+    .portfolio-card p, .portfolio-meta { color: #a8b5c7; line-height: 1.6; }
+    .portfolio-form { display: grid; gap: .7rem; margin-top: 1rem; }
+    .portfolio-form input, .portfolio-form textarea { width: 100%; box-sizing: border-box; padding: .75rem .85rem; border: 1px solid rgba(148, 163, 184, .25); border-radius: 9px; background: rgba(2, 6, 23, .45); color: #f8fafc; font: inherit; }
+    .portfolio-form textarea { min-height: 90px; resize: vertical; }
+    .portfolio-form button { width: fit-content; padding: .7rem 1rem; border: 0; border-radius: 9px; background: #06b6d4; color: #082f49; font: inherit; font-weight: 800; cursor: pointer; }
+    .portfolio-badges { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .portfolio-badge { padding: .45rem .7rem; border-radius: 7px; background: rgba(6, 182, 212, .14); color: #a5f3fc; font-size: .85rem; font-weight: 700; }
+    .portfolio-list { display: grid; gap: .9rem; }
+    .portfolio-item { padding: .9rem 0; border-bottom: 1px solid rgba(148, 163, 184, .14); }
+    .portfolio-item:last-child { border-bottom: 0; }
+    .portfolio-item a { color: #67e8f9; }
+    .portfolio-empty { margin: 0; color: #94a3b8; }
+    @media (max-width: 760px) { .portfolio-hero { align-items: start; flex-direction: column; padding: 1.6rem; } .portfolio-grid { grid-template-columns: 1fr; } .portfolio-card-wide { grid-column: auto; } }
+</style>
+
+<main class="portfolio-shell">
+    {% if error %}
+        <section class="portfolio-card"><h2>Portfolio unavailable</h2><p>{{ error }}</p></section>
+    {% elif student %}
+        <header class="portfolio-hero">
+            <div>
+                <p class="portfolio-kicker">Student portfolio</p>
+                <h1>{{ student.name }}</h1>
+                <p>{{ bio }}</p>
+            </div>
+            <div class="portfolio-actions">
+                <a class="portfolio-btn" href="{{ url_for('student.dashboard') }}">Dashboard</a>
+                {% if editable %}<a class="portfolio-btn portfolio-btn-primary" href="{{ url_for('student.edit_profile') }}">Edit Profile / Portfolio</a>{% endif %}
+                {% if student.resume_path %}<a class="portfolio-btn portfolio-btn-primary" href="{{ url_for('static', filename=student.resume_path) }}" target="_blank" rel="noopener noreferrer">View Resume</a>{% endif %}
+            </div>
+        </header>
+
+        <nav class="portfolio-nav" aria-label="Portfolio sections">
+            {% for section in ['about', 'education', 'skills', 'projects', 'experience', 'certifications', 'achievements', 'resume', 'coding-profiles', 'contact'] %}<a href="#{{ section }}">{{ section|replace('-', ' ')|title }}</a>{% endfor %}
+        </nav>
+
+        <div class="portfolio-grid">
+            <section class="portfolio-card" id="about">
+                <h2>About</h2><p>{{ bio }}</p>
+                {% if editable %}<form class="portfolio-form" action="{{ url_for('student.update_bio') }}" method="post">
+                    <label for="bio">Edit summary</label><textarea id="bio" name="bio">{{ bio }}</textarea><button type="submit">Save About</button>
+                </form>{% endif %}
+            </section>
+
+            <section class="portfolio-card" id="education"><h2>Education</h2><div class="portfolio-item"><h3>{{ education.degree or 'Bachelor of Engineering' }}{% if education.field %} in {{ education.field }}{% endif %}</h3><p>{{ education.college or 'College details not added yet' }}</p><p class="portfolio-meta">{{ education.graduation or education.expected_graduation or 'Expected graduation not added yet' }}</p></div></section>
+
+            <section class="portfolio-card portfolio-card-wide" id="skills"><h2>Skills</h2><div class="portfolio-badges">{% for skill in skills %}<span class="portfolio-badge">{{ skill }}</span>{% else %}<p class="portfolio-empty">No skills listed yet.</p>{% endfor %}</div>{% if editable %}<form class="portfolio-form" action="{{ url_for('student.update_skills') }}" method="post"><label for="portfolio-skills">Add or update skills</label><input id="portfolio-skills" name="skills" value="{{ skills|join(', ') }}" placeholder="Python, SQL, Git" autocomplete="off"><button type="submit">Save Skills</button></form>{% endif %}</section>
+
+            <section class="portfolio-card" id="projects"><h2>Projects</h2><div class="portfolio-list">{% for project in projects %}<article class="portfolio-item"><h3>{{ project.title or project.name }}</h3><p>{{ project.description or 'Project details available on request.' }}</p>{% if project.tech_stack or project.technologies %}<p class="portfolio-meta">{{ (project.tech_stack or project.technologies)|join(', ') if (project.tech_stack or project.technologies) is iterable and (project.tech_stack or project.technologies) is not string else (project.tech_stack or project.technologies) }}</p>{% endif %}<div class="portfolio-links">{% if project.live_url or project.live_link %}<a href="{{ project.live_url or project.live_link }}" target="_blank" rel="noopener noreferrer">Live</a>{% endif %}{% if project.github_url or project.github_link or project.link %}<a href="{{ project.github_url or project.github_link or project.link }}" target="_blank" rel="noopener noreferrer">GitHub / Details</a>{% endif %}</div></article>{% else %}<p class="portfolio-empty">No projects added yet.</p>{% endfor %}</div></section>
+
+            <section class="portfolio-card" id="experience"><h2>Experience / Verified Internships</h2><div class="portfolio-list">{% for item in experience %}<article class="portfolio-item"><h3>{{ item.title or item.role or 'Professional experience' }}</h3><p>{{ item.company or item.company_name or item.organization or 'Organization not listed' }}</p><p class="portfolio-meta">{{ item.duration or item.period or item.start_date or '' }}</p><p>{{ item.description or '' }}</p></article>{% else %}<p class="portfolio-empty">No experience added yet.</p>{% endfor %}</div></section>
+
+            <section class="portfolio-card" id="certifications"><h2>Certifications</h2><div class="portfolio-list">{% for cert in certifications %}<article class="portfolio-item"><h3>{{ cert.title or cert.name or cert }}</h3>{% if cert.issuer %}<p>{{ cert.issuer }}</p>{% endif %}{% if cert.link %}<a href="{{ cert.link }}" target="_blank" rel="noopener noreferrer">View certificate</a>{% endif %}</article>{% else %}<p class="portfolio-empty">No certifications added yet.</p>{% endfor %}</div></section>
+
+            <section class="portfolio-card" id="achievements"><h2>Achievements</h2><div class="portfolio-list">{% for achievement in achievements %}<article class="portfolio-item"><h3>{{ achievement.title or achievement.name or achievement }}</h3><p>{{ achievement.description or achievement.event or '' }}</p></article>{% else %}<p class="portfolio-empty">No achievements added yet.</p>{% endfor %}</div></section>
+
+            <section class="portfolio-card" id="resume"><h2>Resume</h2>{% if student.resume_path %}<p>Your latest resume is ready to share.</p><div class="portfolio-links"><a class="portfolio-btn portfolio-btn-primary" href="{{ url_for('static', filename=student.resume_path) }}" target="_blank" rel="noopener noreferrer">View / Download PDF</a><a class="portfolio-btn" href="{{ url_for('student.dashboard') }}">Update Resume</a></div>{% else %}<p class="portfolio-empty">No resume uploaded yet.</p><a class="portfolio-btn" href="{{ url_for('student.dashboard') }}">Upload Resume</a>{% endif %}</section>
+
+            <section class="portfolio-card" id="coding-profiles"><h2>Coding Profiles</h2><div class="portfolio-list">{% for label, link in coding_profiles.items() %}<article class="portfolio-item"><a href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ label|title }}</a></article>{% else %}<p class="portfolio-empty">No coding profiles added yet.</p>{% endfor %}</div></section>
+
+            <section class="portfolio-card portfolio-card-wide" id="contact"><h2>Socials &amp; Contact</h2><p>{{ student.email }}</p><div class="portfolio-links">{% for label, link in socials.items() %}<a class="portfolio-btn" href="{{ link }}" target="_blank" rel="noopener noreferrer">{{ label|title }}</a>{% endfor %}{% if student.email %}<a class="portfolio-btn portfolio-btn-primary" href="mailto:{{ student.email }}">Message / Connect</a>{% endif %}</div></section>
+        </div>
+    {% endif %}
+</main>
+{% endblock %}

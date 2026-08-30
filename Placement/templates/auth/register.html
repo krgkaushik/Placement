@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Register — Placement Portal{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-card auth-card--wide">
+    <h2 class="auth-title">Create Account</h2>
+    <p class="auth-subtitle">Join the Placement Portal</p>
+
+    <!-- Registration Form -->
+    <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+        <!-- Role Selector -->
+        <div class="form-group">
+            <label for="role">I am a</label>
+            <select id="role" name="role" required class="form-select">
+                <option value="student" selected>🎓 Student</option>
+                <option value="company">🏢 Company</option>
+                <option value="college">🏫 College</option>
+                <option value="faculty">👨‍🏫 Faculty</option>
+            </select>
+        </div>
+
+        <!-- Common Fields -->
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Minimum 6 characters" required
+                minlength="6" autocomplete="new-password">
+        </div>
+
+        <!-- Student Fields -->
+        <div class="role-fields" id="fields-student">
+            <div class="form-group">
+                <label for="student-name">Full Name</label>
+                <input type="text" id="student-name" name="name" placeholder="John Doe">
+            </div>
+        </div>
+
+        <!-- Company Fields -->
+        <div class="role-fields hidden" id="fields-company">
+            <div class="form-group">
+                <label for="company-name">Company Name</label>
+                <input type="text" id="company-name" name="company_name" placeholder="Acme Corp">
+            </div>
+            <div class="form-group">
+                <label for="company-industry">Industry</label>
+                <input type="text" id="company-industry" name="industry" placeholder="Technology">
+            </div>
+        </div>
+
+        <!-- College Fields -->
+        <div class="role-fields hidden" id="fields-college">
+            <div class="form-group">
+                <label for="college-name">College Name</label>
+                <input type="text" id="college-name" name="name" placeholder="MIT University">
+            </div>
+            <div class="form-group">
+                <label for="college-location">Location</label>
+                <input type="text" id="college-location" name="location" placeholder="Mumbai, India">
+            </div>
+        </div>
+
+        <!-- Faculty Fields -->
+        <div class="role-fields hidden" id="fields-faculty">
+            <div class="form-group">
+                <label for="faculty-name">Full Name</label>
+                <input type="text" id="faculty-name" name="name" placeholder="Dr. Jane Smith">
+            </div>
+            <div class="form-group">
+                <label for="faculty-department">Department</label>
+                <input type="text" id="faculty-department" name="department" placeholder="Computer Science">
+            </div>
+            <div class="form-group">
+                <label for="faculty-designation">Designation</label>
+                <input type="text" id="faculty-designation" name="designation" placeholder="Professor">
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+
+    <p class="auth-footer">
+        Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a>
+    </p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

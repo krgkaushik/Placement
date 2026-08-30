@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Assessment History — Placement Portal{% endblock %}
+
+{% block content %}
+<div class="learning-card assessment-history-page">
+    <div class="learning-header">
+        <div>
+            <span class="eyebrow">Progress Tracking</span>
+            <h1>Assessment History</h1>
+            <p>{{ name }}, review your performance over time.</p>
+        </div>
+        <div class="history-actions">
+            <a href="{{ url_for('student.assessment') }}" class="primary-btn">Take Assessment</a>
+            <a href="{{ url_for('student.dashboard') }}" class="btn-logout">Back to Dashboard</a>
+        </div>
+    </div>
+
+    {% if history %}
+    <div class="history-chart-wrap">
+        <canvas id="assessmentProgressChart" aria-label="Assessment score progression"></canvas>
+    </div>
+    <div class="panel table-panel">
+        <table>
+            <thead>
+                <tr><th>Attempt</th><th>Score</th><th>Completed</th></tr>
+            </thead>
+            <tbody>
+                {% for attempt in history|reverse %}
+                <tr>
+                    <td>Attempt {{ history|length - loop.index + 1 }}</td>
+                    <td><strong>{{ attempt.score }}/{{ attempt.total_questions }}</strong></td>
+                    <td>{{ attempt.timestamp.strftime('%Y-%m-%d %H:%M') if attempt.timestamp else 'Recently' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="info-panel"><p>No assessment attempts yet. Take your first assessment to start tracking progress.</p></div>
+    {% endif %}
+</div>
+    {% if history %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    new Chart(document.getElementById('assessmentProgressChart'), {
+        type: 'line',
+        data: {
+            labels: [{% for attempt in history %}'Attempt {{ loop.index }}'{% if not loop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Score',
+                data: [{% for attempt in history %}{{ attempt.score }}{% if not loop.last %}, {% endif %}{% endfor %}],
+                borderColor: '#60a5fa',
+                backgroundColor: 'rgba(96, 165, 250, 0.18)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+    });
+</script>
+{% endif %}
+{% endblock %}

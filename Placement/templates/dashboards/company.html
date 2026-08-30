@@ -1,0 +1,531 @@
+{% extends "base.html" %}
+{% block title %}Company Dashboard — Placement Portal{% endblock %}
+
+{% block content %}
+
+<style>
+    .company-dashboard {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 30px 20px 50px;
+    }
+
+    /* ===== TOP HEADER ===== */
+
+    .company-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 28px;
+    }
+
+    .company-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .company-icon {
+        width: 62px;
+        height: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 17px;
+        background: linear-gradient(135deg, #111827, #3730a3);
+        color: white;
+        font-size: 28px;
+        box-shadow: 0 12px 28px rgba(37, 38, 120, 0.2);
+    }
+
+    .eyebrow {
+        display: block;
+        margin-bottom: 5px;
+        color: #6366f1;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .company-title h1 {
+        margin: 0;
+        color: #111827;
+        font-size: 30px;
+        font-weight: 850;
+        letter-spacing: -0.7px;
+    }
+
+    .company-welcome {
+        margin: 5px 0 0;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    /* ===== ACTION CARDS ===== */
+
+    .actions-section {
+        margin-bottom: 28px;
+    }
+
+    .section-title {
+        margin: 0 0 14px;
+        color: #1e293b;
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+
+    .dash-tile {
+        position: relative;
+        overflow: hidden;
+        min-height: 155px;
+        padding: 22px;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        background: #ffffff;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.045);
+        transition: all 0.25s ease;
+    }
+
+    .dash-tile:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 16px 32px rgba(15, 23, 42, 0.09);
+    }
+
+    .dash-tile::after {
+        content: "→";
+        position: absolute;
+        right: 18px;
+        bottom: 17px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 15px;
+        transition: all 0.2s ease;
+    }
+
+    .dash-tile:hover::after {
+        background: #4f46e5;
+        color: white;
+        transform: translateX(3px);
+    }
+
+    .dash-tile h3 {
+        margin: 0 0 9px;
+        color: #172033;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .dash-tile p {
+        max-width: 85%;
+        margin: 0;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .dash-tile:nth-child(1) {
+        border-top: 3px solid #2563eb;
+    }
+
+    .dash-tile:nth-child(2) {
+        border-top: 3px solid #7c3aed;
+    }
+
+    .dash-tile:nth-child(3) {
+        border-top: 3px solid #10b981;
+    }
+
+    .dash-tile:nth-child(4) {
+        border-top: 3px solid #f59e0b;
+    }
+
+    /* ===== POSTED ROLES ===== */
+
+    .roles-section {
+        margin-top: 28px;
+    }
+
+    .roles-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 13px;
+    }
+
+    .roles-heading h2 {
+        margin: 0;
+        color: #1e293b;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .roles-heading span {
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .panel {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        box-shadow: 0 6px 22px rgba(15, 23, 42, 0.045);
+    }
+
+    .table-panel {
+        overflow: hidden;
+    }
+
+    .table-panel table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-panel th {
+        padding: 14px 22px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 10px;
+        font-weight: 800;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+    }
+
+    .table-panel td {
+        padding: 17px 22px;
+        border-top: 1px solid #edf1f5;
+        color: #64748b;
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+    .table-panel tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .table-panel tbody tr:hover {
+        background: #fafbff;
+    }
+
+    .table-panel td:first-child {
+        color: #111827;
+        font-size: 14px;
+        font-weight: 750;
+    }
+
+    /* ===== TYPE ===== */
+
+    .job-type {
+        display: inline-flex;
+        padding: 6px 10px;
+        border-radius: 7px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* ===== SKILLS ===== */
+
+    .skills-text {
+        max-width: 380px;
+        line-height: 1.6;
+    }
+
+    /* ===== APPLICANTS ===== */
+
+    .applicant-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        height: 28px;
+        padding: 0 8px;
+        border-radius: 8px;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    /* ===== ACTION BUTTON ===== */
+
+    .candidate-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: #eff6ff;
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 750;
+        transition: all 0.2s ease;
+    }
+
+    .candidate-link::after {
+        content: "→";
+        font-size: 14px;
+    }
+
+    .candidate-link:hover {
+        background: #2563eb;
+        color: white;
+        transform: translateX(2px);
+    }
+
+    /* ===== RESPONSIVE ===== */
+
+    @media (max-width: 1000px) {
+        .dashboard-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .table-panel {
+            overflow-x: auto;
+        }
+
+        .table-panel table {
+            min-width: 850px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .company-dashboard {
+            padding: 18px 12px 35px;
+        }
+
+        .company-title h1 {
+            font-size: 24px;
+        }
+
+        .company-icon {
+            width: 52px;
+            height: 52px;
+            font-size: 23px;
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dash-tile {
+            min-height: 125px;
+        }
+
+        .roles-heading {
+            align-items: flex-start;
+            gap: 10px;
+            flex-direction: column;
+        }
+    }
+</style>
+
+
+<div class="company-dashboard">
+
+    <!-- HEADER -->
+
+    <div class="company-header">
+
+        <div class="company-title">
+
+            <div class="company-icon">
+                🏢
+            </div>
+
+            <div>
+                <span class="eyebrow">Recruiter Portal</span>
+
+                <h1>
+                    Company Dashboard
+                </h1>
+
+                <p class="company-welcome">
+                    Welcome, {{ name }}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="actions-section">
+
+        <h2 class="section-title">
+            Hiring Management
+        </h2>
+
+        <div class="dashboard-grid">
+
+            <a href="{{ url_for('company.post_job') }}" class="dash-tile">
+
+                <h3>
+                    📝 Post Internship
+                </h3>
+
+                <p>
+                    Create a new internship listing and reach talented students.
+                </p>
+
+            </a>
+
+
+            <a href="{{ url_for('company.post_job') }}" class="dash-tile">
+
+                <h3>
+                    💼 Post Job
+                </h3>
+
+                <p>
+                    Create a new job listing with required skills and details.
+                </p>
+
+            </a>
+
+
+            <div class="dash-tile">
+
+                <h3>
+                    👥 Applications
+                </h3>
+
+                <p>
+                    Review student applications and candidate profiles.
+                </p>
+
+            </div>
+
+
+            <div class="dash-tile">
+
+                <h3>
+                    📊 Analytics
+                </h3>
+
+                <p>
+                    View hiring performance and recruitment analytics.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- POSTED ROLES -->
+
+    {% if jobs %}
+
+    <div class="roles-section">
+
+        <div class="roles-heading">
+
+            <h2>
+                Your Posted Roles
+            </h2>
+
+            <span>
+                Active Opportunities
+            </span>
+
+        </div>
+
+
+        <div class="panel table-panel">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Required Skills</th>
+                        <th>Applicants</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for job in jobs %}
+
+                    <tr>
+
+                        <td>
+                            {{ job.title }}
+                        </td>
+
+                        <td>
+                            <span class="job-type">
+                                {{ job.type }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="skills-text">
+                                {{ job.required_skills|join(', ') }}
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="applicant-count">
+                                {{ job.applicants or 0 }}
+                            </span>
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="{{ url_for('company.job_candidates', job_id=job._id) }}"
+                                class="candidate-link"
+                            >
+                                View Candidates
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

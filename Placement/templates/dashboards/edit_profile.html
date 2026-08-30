@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile — Placement Portal{% endblock %}
+
+{% block content %}
+<style>
+    .editor-shell { width: min(980px, 94vw); margin: 2rem auto; }
+    .editor-hero, .editor-card { border: 1px solid rgba(148, 163, 184, .2); border-radius: 18px; background: rgba(15, 23, 42, .72); box-shadow: 0 18px 42px rgba(2, 6, 23, .22); }
+    .editor-hero { display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: 2rem; background: linear-gradient(125deg, rgba(15, 23, 42, .96), rgba(14, 116, 144, .72)); }
+    .editor-hero h1 { margin: 0; color: #f8fafc; font-size: clamp(1.8rem, 4vw, 3rem); }
+    .editor-hero p { margin: .55rem 0 0; color: #cbd5e1; }
+    .editor-kicker { margin: 0 0 .45rem !important; color: #67e8f9 !important; font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .editor-actions { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .editor-link, .editor-submit { display: inline-block; padding: .7rem .95rem; border: 1px solid rgba(148, 163, 184, .3); border-radius: 9px; color: #e2e8f0; text-decoration: none; font: inherit; font-weight: 800; }
+    .editor-submit { border: 0; background: #06b6d4; color: #082f49; cursor: pointer; }
+    .editor-form { display: grid; gap: 1rem; margin-top: 1rem; }
+    .editor-card { padding: 1.35rem; }
+    .editor-card h2 { margin: 0 0 1rem; color: #f8fafc; font-size: 1.2rem; }
+    .editor-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+    .editor-field { display: grid; gap: .4rem; }
+    .editor-field-wide { grid-column: 1 / -1; }
+    .editor-field label { color: #cbd5e1; font-size: .8rem; font-weight: 700; }
+    .editor-field input, .editor-field textarea { width: 100%; box-sizing: border-box; padding: .75rem .85rem; border: 1px solid rgba(148, 163, 184, .25); border-radius: 9px; background: rgba(2, 6, 23, .48); color: #f8fafc; font: inherit; }
+    .editor-field textarea { min-height: 90px; resize: vertical; }
+    .editor-repeat { display: grid; gap: .8rem; padding: 1rem 0; border-bottom: 1px solid rgba(148, 163, 184, .14); }
+    .editor-repeat:last-child { border-bottom: 0; }
+    .editor-repeat-title { margin: 0; color: #67e8f9; font-size: .85rem; }
+    .editor-note { margin: -.5rem 0 0; color: #94a3b8; font-size: .8rem; }
+    @media (max-width: 680px) { .editor-hero { align-items: start; flex-direction: column; } .editor-grid { grid-template-columns: 1fr; } .editor-field-wide { grid-column: auto; } }
+</style>
+
+<main class="editor-shell">
+    <header class="editor-hero">
+        <div>
+            <p class="editor-kicker">Profile editor</p>
+            <h1>Edit Profile / Portfolio</h1>
+            <p>Keep your public portfolio current for recruiters and opportunities.</p>
+        </div>
+        <div class="editor-actions"><a class="editor-link" href="{{ url_for('student.student_portfolio') }}">Cancel</a></div>
+    </header>
+
+    <form class="editor-form" action="{{ url_for('student.edit_profile') }}" method="post">
+        <section class="editor-card">
+            <h2>About &amp; Education</h2>
+            <div class="editor-grid">
+                <div class="editor-field editor-field-wide"><label for="bio">About / Bio</label><textarea id="bio" name="bio">{{ student.bio or student.summary or '' }}</textarea></div>
+                <div class="editor-field"><label for="degree">Degree</label><input id="degree" name="degree" value="{{ education.degree or student.degree or '' }}" placeholder="Bachelor of Engineering"></div>
+                <div class="editor-field"><label for="field">Field of study</label><input id="field" name="field" value="{{ education.field or student.field_of_study or '' }}" placeholder="AI &amp; Data Science"></div>
+                <div class="editor-field"><label for="college">College / University</label><input id="college" name="college" value="{{ education.college or student.college_name or '' }}"></div>
+                <div class="editor-field"><label for="graduation">Expected graduation</label><input id="graduation" name="graduation" value="{{ education.graduation or student.expected_graduation or '' }}" placeholder="May 2027"></div>
+            </div>
+        </section>
+
+        <section class="editor-card">
+            <h2>Skills &amp; Coding Profiles</h2>
+            <div class="editor-grid">
+                <div class="editor-field editor-field-wide"><label for="skills">Skills, comma-separated</label><input id="skills" name="skills" value="{{ skills|join(', ') }}" placeholder="Python, SQL, Git, Machine Learning"></div>
+                {% for label, placeholder in [('github', 'https://github.com/username'), ('leetcode', 'https://leetcode.com/username'), ('codeforces', 'https://codeforces.com/profile/username'), ('linkedin', 'https://linkedin.com/in/username')] %}
+                <div class="editor-field"><label for="{{ label }}">{{ label|title }} URL</label><input id="{{ label }}" name="{{ label }}" value="{{ coding_profiles.get(label, '') }}" placeholder="{{ placeholder }}" type="url"></div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="editor-card">
+            <h2>Projects</h2>
+            <p class="editor-note">Add up to five projects. Empty titles are ignored.</p>
+            {% for project in projects[:5] %}
+            <div class="editor-repeat"><p class="editor-repeat-title">Project {{ loop.index }}</p><div class="editor-grid"><div class="editor-field"><label>Title</label><input name="project_title" value="{{ project.title or project.name or '' }}"></div><div class="editor-field"><label>Link</label><input name="project_link" value="{{ project.link or project.github_url or project.live_url or '' }}" type="url"></div><div class="editor-field"><label>Tech stack</label><input name="project_tech_stack" value="{{ project.tech_stack|join(', ') if project.tech_stack is iterable and project.tech_stack is not string else project.tech_stack or project.technologies or '' }}" placeholder="Flask, MongoDB, JavaScript"></div><div class="editor-field"><label>Description</label><textarea name="project_description">{{ project.description or '' }}</textarea></div></div></div>
+            {% endfor %}
+            {% for index in range(5 - (projects|length if projects|length < 5 else 5)) %}
+            <div class="editor-repeat"><p class="editor-repeat-title">Project {{ (projects|length if projects|length < 5 else 5) + loop.index }}</p><div class="editor-grid"><div class="editor-field"><label>Title</label><input name="project_title"></div><div class="editor-field"><label>Link</label><input name="project_link" type="url"></div><div class="editor-field"><label>Tech stack</label><input name="project_tech_stack" placeholder="Flask, MongoDB, JavaScript"></div><div class="editor-field"><label>Description</label><textarea name="project_description"></textarea></div></div></div>
+            {% endfor %}
+        </section>
+
+        <section class="editor-card">
+            <h2>Experience / Internships</h2>
+            {% for item in experience[:4] %}<div class="editor-repeat"><p class="editor-repeat-title">Experience {{ loop.index }}</p><div class="editor-grid"><div class="editor-field"><label>Role</label><input name="experience_role" value="{{ item.role or item.title or '' }}"></div><div class="editor-field"><label>Company</label><input name="experience_company" value="{{ item.company or item.company_name or '' }}"></div><div class="editor-field editor-field-wide"><label>Duration</label><input name="experience_duration" value="{{ item.duration or item.period or '' }}" placeholder="June 2025 - August 2025"></div></div></div>{% endfor %}
+            {% for index in range(4 - (experience|length if experience|length < 4 else 4)) %}<div class="editor-repeat"><p class="editor-repeat-title">Experience {{ (experience|length if experience|length < 4 else 4) + loop.index }}</p><div class="editor-grid"><div class="editor-field"><label>Role</label><input name="experience_role"></div><div class="editor-field"><label>Company</label><input name="experience_company"></div><div class="editor-field editor-field-wide"><label>Duration</label><input name="experience_duration"></div></div></div>{% endfor %}
+        </section>
+
+        <section class="editor-card">
+            <h2>Certifications</h2>
+            {% for cert in certifications[:4] %}<div class="editor-repeat"><p class="editor-repeat-title">Certification {{ loop.index }}</p><div class="editor-grid"><div class="editor-field"><label>Title</label><input name="certification_title" value="{{ cert.title or cert.name or cert }}"></div><div class="editor-field"><label>Issuer</label><input name="certification_issuer" value="{{ cert.issuer or '' }}"></div><div class="editor-field editor-field-wide"><label>Link</label><input name="certification_link" value="{{ cert.link or '' }}" type="url"></div></div></div>{% endfor %}
+            {% for index in range(4 - (certifications|length if certifications|length < 4 else 4)) %}<div class="editor-repeat"><p class="editor-repeat-title">Certification {{ (certifications|length if certifications|length < 4 else 4) + loop.index }}</p><div class="editor-grid"><div class="editor-field"><label>Title</label><input name="certification_title"></div><div class="editor-field"><label>Issuer</label><input name="certification_issuer"></div><div class="editor-field editor-field-wide"><label>Link</label><input name="certification_link" type="url"></div></div></div>{% endfor %}
+        </section>
+
+        <button class="editor-submit" type="submit">Save Profile / Portfolio</button>
+    </form>
+</main>
+{% endblock %}
